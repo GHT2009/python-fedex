@@ -4,7 +4,6 @@ Package Movement Information Service
 This package contains classes to check service availability, route, and postal
 codes. Defined by the PackageMovementInformationService WSDL file. 
 """
-import logging
 from .. base_service import FedexBaseService, FedexError
 
 class FedexPostalCodeNotFound(FedexError):

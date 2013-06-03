@@ -5,7 +5,6 @@ This package contains the shipment tracking methods defined by Fedex's
 TrackService WSDL file. Each is encapsulated in a class for easy access. 
 For more details on each, refer to the respective class's documentation.
 """
-import logging
 from .. base_service import FedexBaseService, FedexError
 
 class FedexInvalidTrackingNumber(FedexError):
