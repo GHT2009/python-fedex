@@ -15,26 +15,34 @@ class FedexProcessShipmentRequest(FedexBaseService):
     send the request. Label printing is supported and very configurable,
     returning an ASCII representation with the response as well.
     """
-    def __init__(self, config_obj, *args, **kwargs):
+    def __init__(self, config_obj, wsdl_name='ShipService_v7.wsdl',
+                 version_info=('7', '0', '0'), *args, **kwargs):
         """
         The optional keyword args detailed on L{FedexBaseService} 
         apply here as well.
 
         @type config_obj: L{FedexConfig}
         @param config_obj: A valid FedexConfig object.        
+
+        @type wsdl_name: str
+        @param wsdl_name: The name of the wsdl file.
+
+        @type version_info: tuple
+        @param version_info: Holds the major, intermediate, and minor components of the version as strings
         """
         self._config_obj = config_obj
         
         # Holds version info for the VersionId SOAP object.
-        self._version_info = {'service_id': 'ship', 'major': '7', 
-                             'intermediate': '0', 'minor': '0'}
+        self._version_info = {'service_id': 'ship', 'major': version_info[0],
+                              'intermediate': version_info[1],
+                              'minor': version_info[2]}
         
         self.RequestedShipment = None
         """@ivar: Holds the RequestedShipment WSDL object."""
         # Call the parent FedexBaseService class for basic setup work.
         super(FedexProcessShipmentRequest, self).__init__(self._config_obj, 
-                                                         'ShipService_v7.wsdl',
-                                                         *args, **kwargs)
+                                                          wsdl_name,
+                                                          *args, **kwargs)
         
     def _prepare_wsdl_objects(self):
         """

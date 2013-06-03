@@ -14,26 +14,34 @@ class FedexRateServiceRequest(FedexBaseService):
     You will need to populate the data structures in self.RequestedShipment, 
     then send the request.
     """
-    def __init__(self, config_obj, *args, **kwargs):
+    def __init__(self, config_obj, wsdl_name='RateService_v8.wsdl',
+                 version_info=('8', '0', '0'), *args, **kwargs):
         """
         The optional keyword args detailed on L{FedexBaseService} 
         apply here as well.
 
         @type config_obj: L{FedexConfig}
         @param config_obj: A valid FedexConfig object.        
+
+        @type wsdl_name: str
+        @param wsdl_name: The name of the wsdl file.
+
+        @type version_info: tuple
+        @param version_info: Holds the major, intermediate, and minor components of the version as strings
         """
         self._config_obj = config_obj
         
         # Holds version info for the VersionId SOAP object.
-        self._version_info = {'service_id': 'crs', 'major': '8', 
-                             'intermediate': '0', 'minor': '0'}
+        self._version_info = {'service_id': 'crs', 'major': version_info[0],
+                              'intermediate': version_info[1],
+                              'minor': version_info[2]}
         
         self.RequestedShipment = None
         """@ivar: Holds the RequestedShipment WSDL object."""
         # Call the parent FedexBaseService class for basic setup work.
-        super(FedexRateServiceRequest, self).__init__(self._config_obj, 
-                                                         'RateService_v8.wsdl',
-                                                         *args, **kwargs)
+        super(FedexRateServiceRequest, self).__init__(self._config_obj,
+                                                      wsdl_name,
+                                                      *args, **kwargs)
         self.ClientDetail.Region = config_obj.express_region_code
         
     def _prepare_wsdl_objects(self):

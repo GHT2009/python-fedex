@@ -22,13 +22,20 @@ class FedexTrackRequest(FedexBaseService):
     want to read the documentation for the L{__init__} method. 
     Particularly, the tracking_value and package_identifier arguments.
     """
-    def __init__(self, config_obj, *args, **kwargs):
+    def __init__(self, config_obj, wsdl_name='TrackService_v6.wsdl',
+                 version_info=('6', '0', '0'), *args, **kwargs):
         """
         Sends a shipment tracking request. The optional keyword args
         detailed on L{FedexBaseService} apply here as well.
         
         @type config_obj: L{FedexConfig}
         @param config_obj: A valid FedexConfig object.
+
+        @type wsdl_name: str
+        @param wsdl_name: The name of the wsdl file.
+
+        @type version_info: tuple
+        @param version_info: Holds the major, intermediate, and minor components of the version as strings
         
         @type tracking_number_unique_id: str
         @param tracking_number_unique_id: Used to distinguish duplicate FedEx tracking numbers.
@@ -36,8 +43,9 @@ class FedexTrackRequest(FedexBaseService):
         self._config_obj = config_obj
         
         # Holds version info for the VersionId SOAP object.
-        self._version_info = {'service_id': 'trck', 'major': '5', 
-                             'intermediate': '0', 'minor': '0'}
+        self._version_info = {'service_id': 'trck', 'major': version_info[0],
+                              'intermediate': version_info[1],
+                              'minor': version_info[2]}
         self.TrackPackageIdentifier = None
         """@ivar: Holds the TrackPackageIdentifier WSDL object."""
         
@@ -45,9 +53,8 @@ class FedexTrackRequest(FedexBaseService):
         
         """@ivar: Holds the TrackingNumberUniqueIdentifier WSDL object."""
         # Call the parent FedexBaseService class for basic setup work.
-        super(FedexTrackRequest, self).__init__(self._config_obj, 
-                                                'TrackService_v5.wsdl',
-                                                *args, **kwargs)
+        super(FedexTrackRequest, self).__init__(self._config_obj,
+                                                wsdl_name, *args, **kwargs)
         self.IncludeDetailedScans = False
         
     def _prepare_wsdl_objects(self):

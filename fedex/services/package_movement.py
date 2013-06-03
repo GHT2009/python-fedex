@@ -23,29 +23,40 @@ class PostalCodeInquiryRequest(FedexBaseService):
     The postal code inquiry enables customers to validate postal codes
     and service commitments.
     """
-    def __init__(self, config_obj, postal_code=None, country_code=None, *args, **kwargs):
+    def __init__(self, config_obj,
+                 wsdl_name='PackageMovementInformationService_v4.wsdl',
+                 version_info=('4', '0', '0'), postal_code=None,
+                 country_code=None, *args, **kwargs):
         """
         Sets up an inquiry request. The optional keyword args
         detailed on L{FedexBaseService} apply here as well.
         
         @type config_obj: L{FedexConfig}
         @param config_obj: A valid FedexConfig object
+
+        @type wsdl_name: str
+        @param wsdl_name: The name of the wsdl file.
+
+        @type version_info: tuple
+        @param version_info: Holds the major, intermediate, and minor components of the version as strings
+
         @param postal_code: a valid postal code
         @param country_code: ISO country code to which the postal code belongs to.
         """
         self._config_obj = config_obj
         
         # Holds version info for the VersionId SOAP object.
-        self._version_info = {'service_id': 'pmis', 'major': '4',
-                             'intermediate': '0', 'minor': '0'}
+        self._version_info = {'service_id': 'pmis', 'major': version_info[0],
+                              'intermediate': version_info[1],
+                              'minor': version_info[2]}
         self.PostalCode = postal_code
         self.CountryCode = country_code
        
        
         # Call the parent FedexBaseService class for basic setup work.
         super(PostalCodeInquiryRequest, self).__init__(self._config_obj,
-                                                'PackageMovementInformationService_v4.wsdl',
-                                                *args, **kwargs)
+                                                       wsdl_name,
+                                                       *args, **kwargs)
         
 
     def _check_response_for_request_errors(self):
